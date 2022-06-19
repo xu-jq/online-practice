@@ -1,4 +1,31 @@
 definitions:
+  define.CommentCreate:
+    properties:
+      comment:
+        type: string
+      contentIdentity:
+        type: string
+    type: object
+  define.ExplanationCreate:
+    properties:
+      content:
+        type: string
+      problemIdentity:
+        type: string
+      title:
+        type: string
+    type: object
+  define.ExplanationModify:
+    properties:
+      content:
+        type: string
+      identity:
+        type: string
+      title:
+        type: string
+      userIdentity:
+        type: string
+    type: object
   define.ProblemBasic:
     properties:
       content:
@@ -25,6 +52,13 @@ definitions:
         type: array
       title:
         description: 问题标题
+        type: string
+    type: object
+  define.ReplyCreate:
+    properties:
+      CommentIdentity:
+        type: string
+      Reply:
         type: string
     type: object
   define.TestCase:
@@ -213,6 +247,94 @@ paths:
       summary: 分类列表
       tags:
       - 公共方法
+  /comment:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: content_identity
+        in: query
+        name: content_identity
+        required: true
+        type: string
+      - description: page
+        in: query
+        name: page
+        type: integer
+      - description: size
+        in: query
+        name: size
+        type: integer
+      responses:
+        "200":
+          description: '{"code":"200","data":""}'
+          schema:
+            type: string
+      summary: 评论列表
+      tags:
+      - 公共方法
+  /explanation-detail:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: explanation_identity
+        in: query
+        name: explanation_identity
+        required: true
+        type: string
+      responses:
+        "200":
+          description: '{"code":"200","data":""}'
+          schema:
+            type: string
+      summary: 题解详情
+      tags:
+      - 公共方法
+  /explanation-list:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: problem_identity
+        in: query
+        name: problem_identity
+        required: true
+        type: string
+      - description: page
+        in: query
+        name: page
+        type: integer
+      - description: size
+        in: query
+        name: size
+        type: integer
+      responses:
+        "200":
+          description: '{"code":"200","data":""}'
+          schema:
+            type: string
+      summary: 题解列表
+      tags:
+      - 公共方法
+  /explanation-readNum:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: explanation_identity
+        in: query
+        name: explanation_identity
+        required: true
+        type: string
+      responses:
+        "200":
+          description: '{"code":"200","data":""}'
+          schema:
+            type: string
+      summary: 题解阅读量
+      tags:
+      - 公共方法
   /login:
     post:
       parameters:
@@ -328,6 +450,32 @@ paths:
       summary: 用户注册
       tags:
       - 公共方法
+  /reply:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: comment_identity
+        in: query
+        name: comment_identity
+        required: true
+        type: string
+      - description: page
+        in: query
+        name: page
+        type: integer
+      - description: size
+        in: query
+        name: size
+        type: integer
+      responses:
+        "200":
+          description: '{"code":"200","data":""}'
+          schema:
+            type: string
+      summary: 回复列表
+      tags:
+      - 公共方法
   /send-code:
     post:
       parameters:
@@ -390,6 +538,281 @@ paths:
       summary: 用户详情
       tags:
       - 公共方法
+  /user/add-collect:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      - description: problem_identity
+        in: query
+        name: problem_identity
+        required: true
+        type: string
+      responses:
+        "200":
+          description: '{"code":"200","data":""}'
+          schema:
+            type: string
+      summary: 添加收藏
+      tags:
+      - 用户私有方法
+  /user/collect:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      - description: page
+        in: query
+        name: page
+        type: integer
+      - description: size
+        in: query
+        name: size
+        type: integer
+      responses:
+        "200":
+          description: '{"code":"200","data":""}'
+          schema:
+            type: string
+      summary: 收藏列表
+      tags:
+      - 用户私有方法
+  /user/collect-delete:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      - description: problem_identity
+        in: query
+        name: problem_identity
+        required: true
+        type: string
+      responses:
+        "200":
+          description: '{"code":"200","data":""}'
+          schema:
+            type: string
+      summary: 取消收藏
+      tags:
+      - 用户私有方法
+  /user/comment-create:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      - description: CommentCreate
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/define.CommentCreate'
+      responses:
+        "200":
+          description: '{"code":"200","data":""}'
+          schema:
+            type: string
+      summary: 评论创建
+      tags:
+      - 用户私有方法
+  /user/comment-delete:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      - description: user_identity
+        in: query
+        name: user_identity
+        required: true
+        type: string
+      - description: comment_identity
+        in: query
+        name: comment_identity
+        required: true
+        type: string
+      responses:
+        "200":
+          description: '{"code":"200","data":""}'
+          schema:
+            type: string
+      summary: 评论删除
+      tags:
+      - 用户私有方法
+  /user/explanation-create:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      - description: ExplanationCreate
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/define.ExplanationCreate'
+      responses:
+        "200":
+          description: '{"code":"200","data":""}'
+          schema:
+            type: string
+      summary: 题解创建
+      tags:
+      - 用户私有方法
+  /user/explanation-delete:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      - description: user_identity
+        in: query
+        name: user_identity
+        required: true
+        type: string
+      - description: explanation_identity
+        in: query
+        name: explanation_identity
+        required: true
+        type: string
+      responses:
+        "200":
+          description: '{"code":"200","data":""}'
+          schema:
+            type: string
+      summary: 题解删除
+      tags:
+      - 用户私有方法
+  /user/explanation-likeNum:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      - description: explanation_identity
+        in: query
+        name: explanation_identity
+        required: true
+        type: string
+      responses:
+        "200":
+          description: '{"code":"200","data":""}'
+          schema:
+            type: string
+      summary: 题解点赞
+      tags:
+      - 用户私有方法
+  /user/explanation-modify:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      - description: ExplanationModify
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/define.ExplanationModify'
+      responses:
+        "200":
+          description: '{"code":"200","data":""}'
+          schema:
+            type: string
+      summary: 题解修改
+      tags:
+      - 用户私有方法
+  /user/reply-create:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      - description: ReplyCreate
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/define.ReplyCreate'
+      responses:
+        "200":
+          description: '{"code":"200","data":""}'
+          schema:
+            type: string
+      summary: 回复创建
+      tags:
+      - 用户私有方法
+  /user/reply-delete:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      - description: user_identity
+        in: query
+        name: user_identity
+        required: true
+        type: string
+      - description: reply_identity
+        in: query
+        name: reply_identity
+        required: true
+        type: string
+      responses:
+        "200":
+          description: '{"code":"200","data":""}'
+          schema:
+            type: string
+      summary: 回复删除
+      tags:
+      - 用户私有方法
   /user/submit:
     post:
       parameters:

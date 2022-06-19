@@ -133,7 +133,8 @@ func Submit(c *gin.Context) {
 			if err != nil {
 				log.Fatalln(err)
 			}
-			io.WriteString(stdinPipe, testCase.Input)
+			//将输入案例写入
+			io.WriteString(stdinPipe, testCase.Input+"\n")
 
 			var bm runtime.MemStats
 			runtime.ReadMemStats(&bm)
@@ -149,7 +150,7 @@ func Submit(c *gin.Context) {
 			runtime.ReadMemStats(&em)
 
 			// 答案错误
-			if testCase.Output != out.String() {
+			if testCase.Output+"\n" != out.String() {
 				WA <- 1
 				return
 			}
